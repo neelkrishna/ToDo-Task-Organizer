@@ -74,16 +74,16 @@ public class Singleton {
         }
     }
 
-//    public File getPhotoFile(ToDoItem toDoItem) {
-//        File externalFilesDir = mContext
-//                .getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-//
-//        if (externalFilesDir == null) {
-//            return null;
-//        }
-//
-//        return new File(externalFilesDir, toDoItem.getPhotoFilename());
-//    }
+    public File getPhotoFile(ToDoItem toDoItem) {
+        File externalFilesDir = mContext
+                .getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        if (externalFilesDir == null) {
+            return null;
+        }
+
+        return new File(externalFilesDir, toDoItem.getPhotoFilename());
+    }
 
     public void updateToDoItem(ToDoItem toDoItem) {
         String uuidString = toDoItem.getId().toString();
