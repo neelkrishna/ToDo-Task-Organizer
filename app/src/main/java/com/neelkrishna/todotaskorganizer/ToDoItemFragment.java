@@ -37,16 +37,16 @@ public class ToDoItemFragment extends Fragment{
     private static final String DIALOG_DATE = "DialogDate";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_CONTACT = 1;
-    //private static final int REQUEST_PHOTO= 2;
+    private static final int REQUEST_PHOTO= 2;
 
     private Callbacks mCallbacks;
     private ToDoItem mToDoItem;
-    //private File mPhotoFile;
+    private File mPhotoFile;
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mCompletedCheckbox;
     private ImageButton mPhotoButton;
-    //private ImageView mPhotoView;
+    private ImageView mPhotoView;
 
     public interface Callbacks{
         void onToDoItemUpdated(ToDoItem toDoItem);
@@ -72,7 +72,7 @@ public class ToDoItemFragment extends Fragment{
         UUID id = (UUID) getArguments().getSerializable(ARG_ID);
         mToDoItem = Singleton.get(getActivity()).getToDoItem(id);
         if(mToDoItem == null) mToDoItem = new ToDoItem();
-//        mPhotoFile = Singleton.get(getActivity()).getPhotoFile(mToDoItem);
+        mPhotoFile = Singleton.get(getActivity()).getPhotoFile(mToDoItem);
     }
 
     @Override
@@ -139,29 +139,29 @@ public class ToDoItemFragment extends Fragment{
             }
         });
 
-//        PackageManager packageManager = getActivity().getPackageManager();
-//
-//        mPhotoButton = (ImageButton) v.findViewById(R.id.camera);
-//        final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//
-//        boolean canTakePhoto = mPhotoFile != null &&
-//                captureImage.resolveActivity(packageManager) != null;
-//        mPhotoButton.setEnabled(canTakePhoto);
-//
-//        if (canTakePhoto) {
-//            Uri uri = Uri.fromFile(mPhotoFile);
-//            captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-//        }
-//
-//        mPhotoButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivityForResult(captureImage, REQUEST_PHOTO);
-//            }
-//        });
-//
-//        mPhotoView = (ImageView) v.findViewById(R.id.photo);
-//        updatePhotoView();
+        PackageManager packageManager = getActivity().getPackageManager();
+
+        mPhotoButton = (ImageButton) v.findViewById(R.id.camera);
+        final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        boolean canTakePhoto = mPhotoFile != null &&
+                captureImage.resolveActivity(packageManager) != null;
+        mPhotoButton.setEnabled(canTakePhoto);
+
+        if (canTakePhoto) {
+            Uri uri = Uri.fromFile(mPhotoFile);
+            captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        }
+
+        mPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(captureImage, REQUEST_PHOTO);
+            }
+        });
+
+        mPhotoView = (ImageView) v.findViewById(R.id.photo);
+        updatePhotoView();
 
         return v;
     }
@@ -199,10 +199,10 @@ public class ToDoItemFragment extends Fragment{
                 c.close();
             }
         }
-//         else if (requestCode == REQUEST_PHOTO) {
-//            updateToDoItem();
-//            updatePhotoView();
-//        }
+         else if (requestCode == REQUEST_PHOTO) {
+            updateToDoItem();
+            updatePhotoView();
+        }
     }
 
     private void updateToDoItem() {
@@ -214,13 +214,13 @@ public class ToDoItemFragment extends Fragment{
         mDateButton.setText(mToDoItem.getDueDate().toString());
     }
 
-//    private void updatePhotoView() {
-//        if (mPhotoFile == null || !mPhotoFile.exists()) {
-//            mPhotoView.setImageDrawable(null);
-//        } else {
-//            Bitmap bitmap = PictureUtils.getScaledBitmap(
-//                    mPhotoFile.getPath(), getActivity());
-//            mPhotoView.setImageBitmap(bitmap);
-//        }
-//    }
+    private void updatePhotoView() {
+        if (mPhotoFile == null || !mPhotoFile.exists()) {
+            mPhotoView.setImageDrawable(null);
+        } else {
+            Bitmap bitmap = PictureUtils.getScaledBitmap(
+                    mPhotoFile.getPath(), getActivity());
+            mPhotoView.setImageBitmap(bitmap);
+        }
+    }
 }
